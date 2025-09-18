@@ -1,0 +1,12 @@
+1. Make a fully functional login system.
+
+2. Add the following:
+    - Login
+    - Home page (Information)
+    - Index page (Show your notes.)
+    - List Management
+
+
+
+App description:
+    This website is designed to be a quick solution to your short term thoughts! Simply take a note, and write your idea down, it will hold that thought for you!

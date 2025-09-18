@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+{% block main %}
+    <!-- Show your notes, perhaps in the way of tabs on the left, and note information on the right. -->
+         <!--
+        {% for note in notes %}
+            <button class="d-block rounded" style="width: 100px;"></button>
+        {% endfor %}
+     -->
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="container col-lg-4 overflow-y: auto rounded bg-light mr-1" style="padding: 10px;"> <!-- Buttons (Notes) -->
+                <button onClick="createNote()" class="btn btn-success mb-2" style="width: 100%; height: 80px; font-size: 2em;">Create note (+)</button>
+
+                <!-- for loop for other buttons here -->
+                {% if Notes %}
+                    {% for note in Notes %}
+                        <button onClick="loadNote(this.dataset.entry, this.innerHTML)" data-entry="{{ note.entry }}" class="btn btn-secondary mb-2" style="width: 100%; height: 80px;">{{ note.name }}</button>
+                    <!-- Each button, upon being clicked should open their data, saving should reload the page -->
+                    {% endfor %}
+                {% endif %}
+                <script>
+                    async function loadNote(noteText, noteName) {
+                        let textEditor = document.querySelector("#textEditor");
+                        textEditor.value = noteText;
+
+                        let namebox = document.querySelector("#noteNameTextbox");
+                        namebox.placeholder = noteName;
+                    }
+                    async function createNote() {
+                        // Send a request to the server to create a empty note to access.
+                        let request = await fetch('/notes',
+                        {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                actionType: "CREATE",
+                                NoteName: "Unnamed Note",
+                                NewName: "Unnamed Note",
+                                Entry: "Empty"
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+
+                        })
+                        window.location.reload();
+                    }
+                    async function saveNote() {
+                        // Send a POST request using the oldNoteName as a key (placeholder)
+                        let oldNoteName = document.querySelector('#noteNameTextbox').placeholder; // input
+                        let newNoteName = document.querySelector('#noteNameTextbox').value; // input
+
+                        console.log(oldNoteName);
+                        console.log(newNoteName);
+                        let entry = document.querySelector('#textEditor').value; // textarea
+                        let request = await fetch('/notes',
+                        {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                actionType: "SAVE",
+                                NoteName: oldNoteName,
+                                NewName: newNoteName,
+                                Entry: entry
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+
+                        })
+                        window.location.reload();
+                    }
+                    async function deleteNote() {
+                        // Send a POST request using the oldNoteName as a key (placeholder)
+                        let oldNoteName = document.querySelector('#noteNameTextbox').placeholder; // input
+                        let request = await fetch('/notes',
+                        {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                actionType: "DELETE",
+                                NoteName: oldNoteName,
+                                NewName: "NULL",
+                                Entry: "NULL"
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+
+                        })
+                        window.location.reload();
+                    }
+                </script>
+            </div>
+
+            <div class="container col-lg-8 " style="height: 100vh;"> <!-- Note info -->
+                <div class="container mb-2 pt-2 rounded bg-light" style="height: 15vh;"> <!-- recent timestamp -->
+                    <label class="mb-3">Note name:</label>
+                    <input id="noteNameTextbox" placeholder="Click a note first">
+                    <button onClick="saveNote()" class="d-block btn btn-primary mb-1" style="width: 8em; height: 2.5em;">Save Note</button>
+                    <button onClick="deleteNote()" class="d-block btn btn-danger" style="width: 6em; height: 2em;">DELETE</button>
+
+                </div>
+
+                <div class="container pt-3 rounded bg-light" style="height: 90%;"> <!-- Note text editor -->
+                    <textarea id="textEditor" style="width: 100%; height: 100%;">Select/Create a note to get started.</textarea>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
