@@ -2,7 +2,7 @@
 # Note Buddy
 #### Video Demo:  [Click Here!](https://youtu.be/sNIeox97S0U)
 #### Description: A video showcasing a website for note taking at an easy simplified level.
-Author: Justin N
+Author: Justin
 
 ## Hello, everyone!
 
